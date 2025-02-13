@@ -42,13 +42,12 @@ IP Assignment: Receives IP dynamically via DHCP from the Domain Controller (DC).
 #### Setting up Internal Network ####
 1. Open Network Adapater 
 2. Identify Internal Network and Wifi that connects to the outer world(usually the world wifi will start with a 10.xxx)
-3. ipv4 with 169.254.41.101 will be internal network
-4. (Optional) Name them to their corresponding network purpose
-5. Rename PC TO "DC" For Clarity Purposes
-6. Set IP of DC to 172.16.0.1
-7. Set Subnet Mask to 255.255.255.0
-8. Leave Default Gateway Empty
-8. set Preferred DNS Server 127.0.0.1
+3. Note: IPv4 with 169.254.41.101 will be internal network
+4. Rename PC TO "DC" For Clarity Purposes
+5. Set IP of DC to 172.16.0.1
+6. Set Subnet Mask to 255.255.255.0
+7. Leave Default Gateway Empty
+8. Set Preferred DNS Server 127.0.0.1
 #### Setting Up Active Directory and Domain Name ####
 1. In Windows Server Manager, add roles and features
 2. Press next, and when the checkbox pops up, choose to add Active Directory Domain Services
@@ -87,21 +86,21 @@ IP Assignment: Receives IP dynamically via DHCP from the Domain Controller (DC).
 4. Go to "Tools," then go to "DHCP"
 5. Congigure Ipv4, right click on it and click "New Scope"
 6. Our new Scope name will be the range of IP Adresses so name it "172.16.0.100-200"
-7. set Start IP address from 172.16.0.100 to 172.16.0.200
-8. give mask a length of 24
+7. Set Start IP address from 172.16.0.100 to 172.16.0.200
+8. Give mask a length of 24
 9. Proceed with default settings until Router(Default Gateway)
 10. Add IP Address of DC(172.16.0.1)
 11. In Domain and DNS Servers, add the 172.16.0.1 and select it and proceed
 12. Skip Wins Server
 13. Authorize Domain by righclicking it in DHCP Wizard and Refresh IPv4
-14. If dont correctly, should see green check marks next to IPv4 and IPv6
+14. If done correctly, should see green check marks next to IPv4 and IPv6
 #### Using Powershell Script to create multiple users ####
 1. Configure Server, and turn off IE "Enhanced Security Configuration"(This allows us to browse internet on Admin and Users)
 2. Drag and drop the zip file named "UserCreationScript.zip" in this repository onto the VirtualBox
 3. On List of Names, add your Name to the Top
 4. Run Powershell ISE as Administrator
 5. Open the Powershell Script "1_CREATE_USERS"
-6. in Powershell ISE type the command: Set-ExecutionPolicy Unrestricted
+6. In Powershell ISE type the command: Set-ExecutionPolicy Unrestricted
 7. Use Powershell to change directory into the Folder containing the script
 8. Run the Script
 9. Verify Users have been created under _USERS Organizational Unit in Active Directory
@@ -117,7 +116,7 @@ IP Assignment: Receives IP dynamically via DHCP from the Domain Controller (DC).
 ping google.com
 ipconfig
 ```
-6. confirm that there is a default gateway and that the Client ping Google
+6. Confirm that there is a default gateway and that the Client ping Google
 7. Join the domain in About -> Rename this PC(Advanced) ->
 8. Change name to appropriate and join domain using your domain name
 9. Join the Domain using the USER account you created where your username is "first initial + last name" and the password is "Password1"
