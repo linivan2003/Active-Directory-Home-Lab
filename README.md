@@ -35,7 +35,7 @@ IP Assignment: Receives IP dynamically via DHCP from the Domain Controller (DC).
 ## Setup ##
 ### Creating Domain Controller ###
 1. Set up Domain Controller Virtual Machine using Virtual Box
-2. In Settings, Add an Additional Network(Internal Network)(This is our internal Server)
+2. In Settings, Add an Additional Network(Internal Network)(This is our internal Server), and in "Advanced" set "Shared Clipboard" and "Drag'n'Drop" to "Bidirectional"
 3. Boot up First VM using the Windows Server 2019 ISO
 4. Set up the Server 2019 ISO, use Desktop Experience, otherwise it will just be a command line
 5. To pass ctrl-alt-del because It's a virtual machine, do "insert" and "insert ctrl-alt-del
@@ -59,7 +59,7 @@ IP Assignment: Receives IP dynamically via DHCP from the Domain Controller (DC).
 7. Input password unselect uncheck "Create DNS Delegation" in DNS options
 8. Keep proceeding "next" until you can click "Install"
 9. Once finished installing, it will log you out and restart
-#### Configuring Users ####
+#### Configuring Admin User ####
 1. Log Back in, it should say your domain name when you sign in
 2. Open Start menu -> "Windows Administrative Tools" -> "Active Directory Users and Computers"
 3. Create an Organizational Unit named "Admins"
@@ -96,4 +96,32 @@ IP Assignment: Receives IP dynamically via DHCP from the Domain Controller (DC).
 13. Authorize Domain by righclicking it in DHCP Wizard and Refresh IPv4
 14. If dont correctly, should see green check marks next to IPv4 and IPv6
 #### Using Powershell Script to create multiple users ####
-1. Configure Server, and turn off IE "Enhanced Security Configuration"(This allows us to browse internet on Admin and Users) 
+1. Configure Server, and turn off IE "Enhanced Security Configuration"(This allows us to browse internet on Admin and Users)
+2. Drag and drop the zip file named "UserCreationScript.zip" in this repository onto the VirtualBox
+3. On List of Names, add your Name to the Top
+4. Run Powershell ISE as Administrator
+5. Open the Powershell Script "1_CREATE_USERS"
+6. in Powershell ISE type the command: Set-ExecutionPolicy Unrestricted
+7. Use Powershell to change directory into the Folder containing the script
+8. Run the Script
+9. Verify Users have been created under _USERS Organizational Unit in Active Directory
+10. Users created with the Script will all have password:Password1
+#### Creating Windows 10 Client ####
+1. Go to VirtualBox, create a new VM, call it CLIENT1
+2. Use Windows 10 64 bit
+2. In Settings -> Network, switch NAT to Internal Network
+3. Open Client VM and mount Windows10 ISO
+4. Make sure to Install Windows 10 Pro, do NOT install HOME
+5. Ensure Everything is working with ipconfig and confirming using:  
+```cmd
+ping google.com
+ipconfig
+```
+6. confirm that there is a default gateway and that the Client ping Google
+7. Join the domain in About -> Rename this PC(Advanced) ->
+8. Change name to appropriate and join domain using your domain name
+9. Join the Domain using the USER account you created where your username is "first initial + last name" and the password is "Password1"
+10. In the DHCP, we can go to Address Leases and see a Lease has been given to our Windows10Client
+## Finished! ##
+You now have access to over 1000 users and can log in to each.  
+Feel free to play around however you'd like, practice anything you'd like to including creating new users, resetting paswords, assigning permissions, applying group policies, etc..
