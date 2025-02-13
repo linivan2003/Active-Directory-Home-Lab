@@ -58,4 +58,42 @@ IP Assignment: Receives IP dynamically via DHCP from the Domain Controller (DC).
 6. Specify Domain Name(Whatever you would like it to be I named it "mydomain.com")
 7. Input password unselect uncheck "Create DNS Delegation" in DNS options
 8. Keep proceeding "next" until you can click "Install"
-9. Once finished installing, it will log you out and restart.
+9. Once finished installing, it will log you out and restart
+#### Configuring Users ####
+1. Log Back in, it should say your domain name when you sign in
+2. Open Start menu -> "Windows Administrative Tools" -> "Active Directory Users and Computers"
+3. Create an Organizational Unit named "Admins"
+4. Create a new User with you name in "Admins"
+5. Right your user and go to "Properties" -> "Member of" -> "add"
+6. Inside the "Enter the Object Names to Select", type in "Domain Admins", then "Check Names" and click "Okay"
+7. Let's user our new Domain Admin: Sign out of Windows
+8. Instead of logging into Normal user, select "Other User"
+9. Sign in using the credentials you specified earlier for your user
+#### Installing RAS/NAT ####
+1. Our purpose for installing this is that we can use an Internet client to connect to our Windows 10 Device and it would still be considered within the Internal Network of our server.
+2. In Server Manager, "Add Roles and Features", Go until you can select "Remote Access", Select it and proceed
+3. In "Role Services," Check "Routing" and install it
+4. Proceed to the end and finish installation
+5. Go to "tools" and go to "Routing and Remote Access
+6. Go to DC(Local) and Configure
+6. Select "NAT"
+7. In "NAT Internet Configuration," select the Wi-fi(Do not select the Internal Server)
+8. Next and then Finish
+9. RAS/NAT is now installed
+### Setting up DHCP Server ####
+1. Allows our Window 10 Clients to get an IP Address that allows them to browse the internet
+2. In Server Manager, "Add Roles and Features", Add the "DHCP" Feature
+3. Finish and Install
+4. Go to "Tools," then go to "DHCP"
+5. Congigure Ipv4, right click on it and click "New Scope"
+6. Our new Scope name will be the range of IP Adresses so name it "172.16.0.100-200"
+7. set Start IP address from 172.16.0.100 to 172.16.0.200
+8. give mask a length of 24
+9. Proceed with default settings until Router(Default Gateway)
+10. Add IP Address of DC(172.16.0.1)
+11. In Domain and DNS Servers, add the 172.16.0.1 and select it and proceed
+12. Skip Wins Server
+13. Authorize Domain by righclicking it in DHCP Wizard and Refresh IPv4
+14. If dont correctly, should see green check marks next to IPv4 and IPv6
+#### Using Powershell Script to create multiple users ####
+1. Configure Server, and turn off IE "Enhanced Security Configuration"(This allows us to browse internet on Admin and Users) 
