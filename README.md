@@ -53,3 +53,9 @@ IP Assignment: Receives IP dynamically via DHCP from the Domain Controller (DC).
 1. In Windows Server Manager, add roles and features
 2. Press next, and when the checkbox pops up, choose to add Active Directory Domain Services
 3. Proceed and Install, may take a minute
+4. In top Right, click flag and promote to Domain Controller
+5. Select "Add a New Forest"
+6. Specify Domain Name(Whatever you would like it to be I named it "mydomain.com")
+7. Input password unselect uncheck "Create DNS Delegation" in DNS options
+8. Keep proceeding "next" until you can click "Install"
+9. Once finished installing, it will log you out and restart.
