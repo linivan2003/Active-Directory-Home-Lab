@@ -8,7 +8,7 @@
 - [Server 2019 ISO](https://www.microsoft.com/en-us/evalcenter/download-windows-server-2019)
 ## High Level Overview ##
 We will  be using 2 VMs to simulate an Active Directory environment.
-![Alt text](AD HIGH LEVEL IMAGE.png)
+![Alt text](AD_HIGH_LEVEL.png)
 ### First Machine ###
 **Windows Server 2019 (Domain Controller - DC)**  
 Purpose: Acts as the Domain Controller (DC) for managing users, authentication, and security policies.  
