@@ -94,17 +94,11 @@ IP Assignment: Receives IP dynamically via DHCP from the Domain Controller (DC).
 12. Skip Wins Server
 13. Authorize Domain by righclicking it in DHCP Wizard and Refresh IPv4
 14. If done correctly, should see green check marks next to IPv4 and IPv6
-#### Using Powershell Script to create multiple users ####
+#### Creating multiple users ####
 1. Configure Server, and turn off IE "Enhanced Security Configuration"(This allows us to browse internet on Admin and Users)
-2. Drag and drop the zip file named "UserCreationScript.zip" in this repository onto the VirtualBox
-3. On List of Names, add your Name to the Top
-4. Run Powershell ISE as Administrator
-5. Open the Powershell Script "1_CREATE_USERS"
-6. In Powershell ISE type the command: Set-ExecutionPolicy Unrestricted
-7. Use Powershell to change directory into the Folder containing the script
-8. Run the Script
-9. Verify Users have been created under _USERS Organizational Unit in Active Directory
-10. Users created with the Script will all have password:Password1
+2. Create a New Organizational Unit called USERS
+3. Create new users setting passwords and usernames
+4. Alternatively, you can use the script I created and modify it a bit and add names to the csv file to create a bunch of new users in bulk
 #### Creating Windows 10 Client ####
 1. Go to VirtualBox, create a new VM, call it CLIENT1
 2. Use Windows 10 64 bit
@@ -124,3 +118,80 @@ ipconfig
 ## Finished! ##
 You now have access to over 1000 users and can log in to each.  
 Feel free to play around however you'd like, practice anything you'd like to including creating new users, resetting paswords, assigning permissions, applying group policies, etc..
+
+
+## Shell Scripting Practice ## 
+We can practice some basic automation in Active Directory using PowerShell Scripting
+
+### Writing Contents Of a Directory ###
+```powershell
+$text = "C:\Users\linivan2003\Desktop"
+Write-Output "writing contents of $text"
+Get-ChildItem -Path $text
+```
+$text is a variable
+Write-Output prints to the command line
+Get-ChildItem has parameter -path and $text defines the path
+
+### For Loops, Functions, Conditionals ###
+```powershell
+Function catchNumbers{
+param(
+[Parameter(Mandatory=$true)]
+[int]$numbers,
+
+[Parameter(Mandatory = $true)]
+[int]$numCatch
+)
+$numbersNew = 1..$numbers
+foreach ($x in $numbersNew){
+if($x -eq $numCatch)
+{
+Write-Output "caught $numCatch"
+}
+else
+{
+Write-Output "number: $x"
+}
+}
+}
+
+catchNumbers -numbers 8 -numCatch 3
+```
+
+### Fahrenheit -> Celsius ###
+```powershell
+Function Convert-Temperature{
+Param(
+[Parameter(Mandatory= "True")]
+[double]$Fahrenheit
+)
+# Celsius = 5/9 * (Fahrenheit -32)
+$Celsius = 5/9 * ($Fahrenheit -32)
+Write-Output "$Celsius degrees Celsius"
+}
+
+Convert-Temperature -Fahrenheit 32
+Convert-Temperature -Fahrenheit 100
+Convert-Temperature -Fahrenheit 212
+```
+
+### Bulk Creating users in AD ###
+```powershell
+Function bulkCreate{
+$users = Import-Csv C:\Users\linivan2003\Desktop\People.csv
+foreach($user in $Users){
+$Name = $user.Name
+$GivenName = $user.GivenName
+$Surname = $user.Surname
+$samName = $GivenName[0] + $Surname
+$userPrincipalName = $samName + "@domain.com"
+$path = "OU=30USERS,DC=mydomain,DC=com"
+$Password = ConvertTo-SecureString "Farty123" -AsPlainText -Force
+New-ADUser -Name $Name -GivenName $GivenName -Surname $Surname -SamAccountName $samName -UserPrincipalName $userPrincipalName -path $path -AccountPassword $Password -Enabled $true
+Write-Output "created user $GivenName"
+}
+}
+
+bulkCreate 
+```
